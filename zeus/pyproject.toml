@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zeus"
+description = "A framework for deep learning energy measurement and optimization."
+readme = "README.md"
+authors = [
+    {name = "Zeus Team"},
+]
+license = {text = "Apache 2.0"}
+classifiers = [
+    "Environment :: GPU :: NVIDIA CUDA",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = ["deep-learning", "power", "energy", "carbon", "sustainability", "mlsys"]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "nvidia-ml-py",
+    "pydantic",  # The `zeus.utils.pydantic_v1` compatibility layer allows us to unpin Pydantic in most cases.
+    "rich",
+    "tyro",
+    "httpx",
+    "amdsmi",
+    "python-dateutil",
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/ml-energy/zeus"
+Homepage = "https://ml.energy/zeus"
+Documentation = "https://ml.energy/zeus"
+
+[project.optional-dependencies]
+# One day FastAPI will drop support for Pydantic V1. Then fastapi has to be pinned as well.
+pfo = ["pydantic<2"]
+pfo-server = ["fastapi[standard]", "pydantic<2", "lowtime", "aiofiles", "torch"]
+bso = ["pydantic<2"]
+bso-server = ["fastapi[standard]", "sqlalchemy", "pydantic<2", "python-dotenv"]
+migration = ["alembic", "sqlalchemy", "pydantic<2", "python-dotenv"]
+prometheus = ["prometheus-client"]
+lint = ["ruff", "black==22.6.0", "pyright", "pandas-stubs", "transformers"]
+test = ["fastapi[standard]", "sqlalchemy", "pydantic<2", "pytest==7.3.2", "pytest-mock==3.10.0", "pytest-xdist==3.3.1", "anyio==3.7.1", "aiosqlite==0.20.0", "numpy<2"]
+docs = ["mkdocs-material[imaging]==9.5.19", "mkdocstrings[python]==0.25.0", "mkdocs-gen-files==0.5.0", "mkdocs-literate-nav==0.6.1", "mkdocs-section-index==0.3.9", "mkdocs-redirects==1.2.1", "urllib3<2", "black"]
+# greenlet is for supporting apple mac silicon for sqlalchemy(https://docs.sqlalchemy.org/en/20/faq/installation.html)
+dev = ["zeus[pfo-server,bso,bso-server,migration,prometheus,lint,test]", "greenlet"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.dynamic]
+version = {attr = "zeus.__version__"}
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle error
+  "F",   # pyflakes
+  "D",   # pydocstyle
+  "PL",  # pylint
+  "N",   # pep8-naming
+  "B",   # flake8-bugbear (detects likely bugs)
+  "G",   # flake8-logging-format (complains about logging)
+  "SIM", # flake8-simplify (suggests code simplifications)
+]
+ignore = [
+  "PLW0603",  # Global statement
+  "B019",     # Usage of functools.lru_cache
+  "PLR0913",  # Too many function arguments
+  "PLR0912",  # Too many branches
+  "B905",     # zip strict argument
+  "PLR0915",  # Too many statements
+  "PLR2004",  # Magic values
+  "SIM115",   # Context manager for opening files
+  "E501",     # Line too long
+]
+pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401", "F403"]
+"zeus/optimizer/pipeline_frequency/common.py" = ["N805"]
+"zeus/optimizer/pipeline_frequency/server/router.py" = ["B008"]
+"zeus/utils/pydantic_v1.py" = ["F403"]
+"zeus/optimizer/batch_size/**/commands.py" = ["N805"]
+"zeus/optimizer/batch_size/**/models.py" = ["N805"]
+"zeus/optimizer/batch_size/server/config.py" = ["N805"]
+"zeus/optimizer/batch_size/server/router.py" = ["B008"]
+"zeus/optimizer/batch_size/common.py" = ["N805"]
+"zeus/device/gpu/*.py" = ["N802", "N803"]
+"zeus/device/cpu/*.py" = ["N802"]
+"zeus/utils/testing.py" = ["N802"]
+
+[tool.pytest.ini_options]
+addopts = "--numprocesses auto"

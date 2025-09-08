@@ -1,0 +1,9 @@
+zeus
+accelerate >= 0.12.0
+torch >= 1.3
+datasets >= 1.8.0
+transformers>=4.37.2
+peft
+trl
+bitsandbytes
+nvidia-cusparse-cu11

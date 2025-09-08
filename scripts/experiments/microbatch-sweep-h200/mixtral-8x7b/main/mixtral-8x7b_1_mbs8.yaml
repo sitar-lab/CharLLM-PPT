@@ -1,0 +1,180 @@
+exp_manager:
+  checkpoint_callback_params:
+    always_save_nemo: false
+    filename: megatron_mixtral--{val_loss:.2f}-{step}-{consumed_samples}
+    mode: min
+    model_parallel_size: 2
+    monitor: val_loss
+    save_nemo_on_train_end: false
+    save_top_k: 10
+  create_checkpoint_callback: false
+  create_wandb_logger: false
+  exp_dir: null
+  explicit_log_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/microbatch-sweep-h200/mixtral-8x7b/mixtral-8x7b_1_mbs8
+  log_step_timing: true
+  name: megatron_mixtral-8x7b
+  resume_if_exists: false
+  resume_ignore_no_checkpoint: true
+  step_timing_kwargs:
+    buffer_size: 5
+    sync_cuda: true
+  wandb_logger_kwargs:
+    name: mixtral-8x7b_1_mbs8
+    project: nemo_mixtral_pretrain
+model:
+  activation: fast-swiglu
+  activations_checkpoint_granularity: full
+  activations_checkpoint_method: block
+  activations_checkpoint_num_layers: 32
+  apex_transformer_log_level: 30
+  apply_query_key_layer_scaling: false
+  apply_rope_fusion: false
+  attention_dropout: 0.0
+  attention_type: multihead
+  bias: false
+  bias_activation_fusion: true
+  bias_dropout_add_fusion: true
+  chakra_profile:
+    active_steps: 1
+    enabled: true
+    end_step: 10
+    start_step: 10
+    trace_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/microbatch-sweep-h200/mixtral-8x7b/mixtral-8x7b_1_mbs8
+    warmup_steps: 0
+  data:
+    data_impl: mmap
+    data_prefix:
+    - 1.0
+    - ${CHARLLM_ROOT}/CharLLM-PPT/mixtral_data/my-mixtral_00_text_document
+    dataloader_type: single
+    eod_mask_loss: false
+    index_mapping_dir: null
+    num_workers: 2
+    reset_attention_mask: false
+    reset_position_ids: false
+    seq_length: 4096
+    skip_warmup: true
+    splits_string: 99990,8,2
+  do_layer_norm_weight_decay: false
+  encoder_seq_length: 4096
+  expert_model_parallel_size: 8
+  ffn_dropout: 0
+  ffn_hidden_size: 14336
+  fp16_lm_cross_entropy: false
+  fp32_residual_connection: false
+  get_attention_mask_from_fusion: false
+  global_batch_size: 128
+  grad_allreduce_chunk_size_mb: 125
+  grad_div_ar_fusion: true
+  gradient_accumulation_fusion: true
+  gradient_as_bucket_view: true
+  headscale: false
+  hidden_dropout: 0.0
+  hidden_size: 4096
+  hysteresis: 2
+  init_method_std: 0.02
+  kv_channels: null
+  layernorm_epsilon: 1.0e-05
+  make_vocab_size_divisible_by: 128
+  masked_softmax_fusion: false
+  max_position_embeddings: 4096
+  mcore_customization_config:
+    new_decoder_architecture: false
+    parallel_attention: false
+  mcore_gpt: true
+  megatron_amp_O2: true
+  memory_profile:
+    enabled: false
+    end_step: 20
+    output_path: ${CHARLLM_ROOT}/CharLLM-PPT/results/nemo-experiments/mixtral-8x7b/100000-traces
+    rank: 0
+    start_step: 20
+  micro_batch_size: 8
+  moe_aux_loss_coeff: 0.01
+  moe_expert_capacity_factor: 1.0
+  moe_grouped_gemm: false
+  moe_pad_expert_input_to_capacity: true
+  moe_router_topk: 2
+  moe_token_dispatcher_type: alltoall
+  native_amp_growth_interval: 1000
+  native_amp_init_scale: 4294967296
+  normalization: rmsnorm
+  normalize_attention_scores: true
+  nsys_profile:
+    enabled: false
+    end_step: 20
+    gen_shape: false
+    ranks:
+    - 0
+    start_step: 20
+  num_attention_heads: 32
+  num_layers: 32
+  num_moe_experts: 8
+  num_query_groups: 8
+  onnx_safe: false
+  openai_gelu: false
+  optim:
+    betas:
+    - 0.9
+    - 0.95
+    grad_sync_dtype: bf16
+    lr: 0.0001
+    name: mcore_distributed_optim
+    overlap_grad_sync: false
+    overlap_param_sync: false
+    sched:
+      constant_steps: 11873
+      min_lr: 1.0e-05
+      name: CosineAnnealing
+      warmup_steps: 636
+    weight_decay: 0.1
+  persist_layer_norm: true
+  pipeline_model_parallel_size: 1
+  position_embedding_type: rope
+  post_process: true
+  pre_process: true
+  precision: bf16
+  rampup_batch_size: null
+  resume_from_checkpoint: null
+  rotary_base: 1000000.0
+  rotary_percentage: 1.0
+  seed: 1234
+  seq_len_interpolation_factor: null
+  sequence_parallel: false
+  share_embeddings_and_output_weights: false
+  sync_batch_comm: false
+  tensor_model_parallel_size: 1
+  tokenizer:
+    library: huggingface
+    type: mistralai/Mixtral-8x7B-v0.1
+    use_fast: true
+  transformer_block_type: pre_ln
+  transformer_engine: true
+  ub_tp_comm_overlap: false
+  use_cpu_initialization: false
+  use_emha: false
+  use_flash_attention: true
+  use_scaled_init_method: true
+  virtual_pipeline_model_parallel_size: null
+run:
+  dependency: singleton
+  name: mixtral-8x7b_1_mbs8
+  results_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/microbatch-sweep-h200/mixtral-8x7b/mixtral-8x7b_1_mbs8
+  time_limit: 0-00:55:00
+trainer:
+  accelerator: gpu
+  accumulate_grad_batches: 1
+  devices: 8
+  enable_checkpointing: false
+  gradient_clip_val: 1.0
+  limit_test_batches: 4
+  limit_val_batches: 4
+  log_every_n_steps: 20
+  logger: false
+  max_epochs: null
+  max_steps: 11
+  max_time: 05:23:30:00
+  num_nodes: 4
+  precision: bf16
+  use_distributed_sampler: false
+  val_check_interval: 20

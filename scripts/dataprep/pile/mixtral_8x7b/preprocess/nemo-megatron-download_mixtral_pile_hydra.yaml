@@ -1,0 +1,18 @@
+run:
+  name: download_mixtral_pile
+  results_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/download_mixtral_pile
+  time_limit: '1:00:00'
+  dependency: aftercorr:687505
+  node_array_size: 1
+  array: 0
+  bcp_preproc_npernode: 1
+dataset: pile
+download_the_pile: true
+the_pile_url: https://huggingface.co/datasets/monology/pile-uncopyrighted/resolve/main/train/
+file_numbers: 0
+preprocess_data: true
+tokenizer_library: huggingface
+tokenizer_type: mistralai/Mixtral-8x7B-v0.1
+rm_downloaded: false
+rm_extracted: false
+megatron_dir: ${CHARLLM_ROOT}/CharLLM-PPT/NeMo/nemo/collections/nlp/data/language_modeling/megatron

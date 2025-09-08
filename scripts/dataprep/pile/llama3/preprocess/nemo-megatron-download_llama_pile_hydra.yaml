@@ -1,0 +1,19 @@
+run:
+  name: download_llama_pile
+  results_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/download_llama_pile
+  time_limit: '1:00:00'
+  dependency: aftercorr:841513
+  node_array_size: 1
+  array: '0'
+  bcp_preproc_npernode: 1
+dataset: pile
+download_the_pile: true
+the_pile_url: https://huggingface.co/datasets/monology/pile-uncopyrighted/resolve/main/train/
+file_numbers: '0'
+preprocess_data: true
+download_tokenizer_url: https://huggingface.co/decapoda-research/llama-7b-hf/resolve/main/tokenizer.model
+tokenizer_library: sentencepiece
+tokenizer_save_dir: ${CHARLLM_ROOT}/CharLLM-PPT/llama_data
+tokenizer_model: ${CHARLLM_ROOT}/CharLLM-PPT/llama_data/llama_tokenizer.model
+rm_downloaded: false
+rm_extracted: false

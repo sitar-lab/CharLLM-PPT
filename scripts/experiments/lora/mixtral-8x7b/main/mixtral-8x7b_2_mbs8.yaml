@@ -1,0 +1,243 @@
+exp_manager:
+  checkpoint_callback_params:
+    always_save_nemo: false
+    filename: megatron_mixtral--{val_loss:.2f}-{step}-{consumed_samples}
+    mode: min
+    model_parallel_size: 2
+    monitor: val_loss
+    save_nemo_on_train_end: false
+    save_top_k: 10
+  create_checkpoint_callback: false
+  create_wandb_logger: false
+  exp_dir: null
+  explicit_log_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/lora/mixtral-8x7b/mixtral-8x7b_2_mbs8
+  log_step_timing: true
+  name: megatron_mixtral-8x7b
+  resume_if_exists: false
+  resume_ignore_no_checkpoint: true
+  step_timing_kwargs:
+    buffer_size: 5
+    sync_cuda: true
+  wandb_logger_kwargs:
+    name: mixtral-8x7b_2_mbs8
+    project: nemo_mixtral_pretrain
+model:
+  activation: fast-swiglu
+  activations_checkpoint_granularity: null
+  activations_checkpoint_layers_per_pipeline: null
+  activations_checkpoint_method: null
+  activations_checkpoint_num_layers: null
+  apex_transformer_log_level: 30
+  apply_query_key_layer_scaling: false
+  apply_rope_fusion: false
+  attention_dropout: 0.0
+  attention_type: multihead
+  bias: false
+  bias_activation_fusion: true
+  bias_dropout_add_fusion: true
+  chakra_profile:
+    active_steps: 1
+    enabled: true
+    end_step: 10
+    start_step: 10
+    trace_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/lora/mixtral-8x7b/mixtral-8x7b_2_mbs8
+    warmup_steps: 0
+  data:
+    train_ds:
+      add_bos: true
+      add_eos: true
+      add_sep: false
+      concat_sampling_probabilities:
+      - 1.0
+      context_key: input
+      drop_last: true
+      file_names:
+      - ${CHARLLM_ROOT}/CharLLM-PPT/pubmedqa/pubmedqa_train.jsonl
+      global_batch_size: 128
+      index_mapping_dir: null
+      label_key: output
+      max_seq_length: 2048
+      memmap_workers: 2
+      micro_batch_size: 8
+      min_seq_length: 1
+      num_workers: 0
+      pad_to_max_length: true
+      pin_memory: true
+      prompt_template: '{input} {output}'
+      separate_prompt_and_response_with_newline: false
+      shuffle: true
+      truncation_field: context
+    validation_ds:
+      add_bos: ${model.data.train_ds.add_bos}
+      add_eos: ${model.data.train_ds.add_eos}
+      add_sep: ${model.data.train_ds.add_sep}
+      context_key: input
+      drop_last: false
+      file_names:
+      - ${CHARLLM_ROOT}/CharLLM-PPT/pubmedqa/pubmedqa_val.jsonl
+      global_batch_size: 128
+      index_mapping_dir: null
+      label_key: output
+      max_seq_length: ${model.data.train_ds.max_seq_length}
+      memmap_workers: ${model.data.train_ds.memmap_workers}
+      metric:
+        average: null
+        name: loss
+        num_classes: null
+      micro_batch_size: 8
+      min_seq_length: ${model.data.train_ds.min_seq_length}
+      num_workers: 0
+      output_file_path_prefix: null
+      pad_to_max_length: true
+      pin_memory: true
+      prompt_template: ${model.data.train_ds.prompt_template}
+      separate_prompt_and_response_with_newline: ${model.data.train_ds.separate_prompt_and_response_with_newline}
+      shuffle: false
+      tokens_to_generate: 32
+      truncation_field: context
+      write_predictions_to_file: false
+  do_layer_norm_weight_decay: false
+  encoder_seq_length: 4096
+  expert_model_parallel_size: 4
+  ffn_dropout: 0
+  ffn_hidden_size: 14336
+  fp16_lm_cross_entropy: false
+  fp32_residual_connection: false
+  get_attention_mask_from_fusion: true
+  global_batch_size: 128
+  grad_allreduce_chunk_size_mb: 125
+  grad_div_ar_fusion: true
+  gradient_accumulation_fusion: true
+  gradient_as_bucket_view: true
+  headscale: false
+  hidden_dropout: 0.0
+  hidden_size: 6144
+  hysteresis: 2
+  init_method_std: 0.02
+  kv_channels: null
+  layernorm_epsilon: 1.0e-05
+  make_vocab_size_divisible_by: 128
+  masked_softmax_fusion: false
+  max_position_embeddings: 4096
+  mcore_customization_config:
+    new_decoder_architecture: false
+    parallel_attention: false
+  mcore_gpt: true
+  megatron_amp_O2: true
+  memory_profile:
+    enabled: false
+    end_step: 20
+    output_path: ${CHARLLM_ROOT}/CharLLM-PPT/results/nemo-experiments/mixtral-8x7b/100000-traces
+    rank: 0
+    start_step: 20
+  micro_batch_size: 8
+  moe_aux_loss_coeff: 0.01
+  moe_expert_capacity_factor: 1.0
+  moe_grouped_gemm: false
+  moe_pad_expert_input_to_capacity: true
+  moe_router_topk: 2
+  moe_token_dispatcher_type: alltoall
+  native_amp_growth_interval: 1000
+  native_amp_init_scale: 4294967296
+  normalization: rmsnorm
+  normalize_attention_scores: true
+  nsys_profile:
+    enabled: false
+    end_step: 20
+    gen_shape: false
+    ranks:
+    - 0
+    start_step: 20
+  num_attention_heads: 32
+  num_layers: 32
+  num_moe_experts: 8
+  num_query_groups: 8
+  onnx_safe: false
+  openai_gelu: false
+  optim:
+    betas:
+    - 0.9
+    - 0.95
+    lr: 0.0001
+    name: fused_adam
+    sched:
+      constant_steps: 11873
+      min_lr: 1.0e-05
+      name: CosineAnnealing
+      warmup_steps: 636
+    weight_decay: 0.1
+  peft:
+    adapter_tuning:
+      adapter_dim: 32
+      adapter_dropout: 0.0
+      column_init_method: xavier
+      layer_selection: null
+      norm_position: pre
+      norm_type: mixedfusedlayernorm
+      position_embedding_strategy: null
+      row_init_method: zero
+      type: parallel_adapter
+      weight_tying: false
+    ia3_tuning:
+      layer_selection: null
+    lora_tuning:
+      adapter_dim: 32
+      adapter_dropout: 0.0
+      column_init_method: xavier
+      layer_selection: null
+      position_embedding_strategy: null
+      row_init_method: zero
+      weight_tying: false
+    peft_scheme: lora
+    restore_from_path: null
+  persist_layer_norm: true
+  pipeline_model_parallel_size: 1
+  position_embedding_type: rope
+  post_process: true
+  pre_process: true
+  precision: bf16
+  rampup_batch_size: null
+  restore_from_path: ${CHARLLM_ROOT}/models/mixtral-8x7b/megatron_mixtral-8x7b-v1.nemo
+  resume_from_checkpoint: null
+  rotary_base: 1000000.0
+  rotary_percentage: 1.0
+  seed: 1234
+  seq_len_interpolation_factor: null
+  sequence_parallel: false
+  share_embeddings_and_output_weights: false
+  sync_batch_comm: false
+  tensor_model_parallel_size: 2
+  tokenizer:
+    library: huggingface
+    type: mistralai/Mixtral-8x7B-v0.1
+    use_fast: true
+  tp_comm_overlap: false
+  transformer_block_type: pre_ln
+  transformer_engine: true
+  use_cpu_initialization: false
+  use_emha: false
+  use_flash_attention: true
+  use_scaled_init_method: true
+  virtual_pipeline_model_parallel_size: null
+run:
+  dependency: singleton
+  name: mixtral-8x7b_2_mbs8
+  results_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/lora/mixtral-8x7b/mixtral-8x7b_2_mbs8
+  time_limit: 0-00:55:00
+trainer:
+  accelerator: gpu
+  accumulate_grad_batches: 1
+  devices: 8
+  enable_checkpointing: false
+  gradient_clip_val: 1.0
+  limit_test_batches: 4
+  limit_val_batches: 4
+  log_every_n_steps: 20
+  logger: false
+  max_epochs: null
+  max_steps: 11
+  max_time: 05:23:30:00
+  num_nodes: 4
+  precision: bf16
+  use_distributed_sampler: false
+  val_check_interval: 11

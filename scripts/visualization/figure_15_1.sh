@@ -1,0 +1,1 @@
+python concat_pdfs.py ../../final_figures/figures-h200-novpp-fsdp-mbs1/no_bottom/gpt3-175b_rank_comparison_no_bottom-fsdp.pdf ../../final_figures/figures-h200-novpp-mbs1/no_bottom/gpt3-175b_rank_comparison_no_bottom.pdf ../../final_figures/figure_15_1.pdf

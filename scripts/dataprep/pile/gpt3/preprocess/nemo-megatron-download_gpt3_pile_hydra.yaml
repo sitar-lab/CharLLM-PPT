@@ -1,0 +1,21 @@
+run:
+  name: download_gpt3_pile
+  results_dir: ${CHARLLM_ROOT}/CharLLM-PPT/results/download_gpt3_pile
+  time_limit: '4:00:00'
+  dependency: aftercorr:673022
+  node_array_size: 1
+  array: 0
+  bcp_preproc_npernode: 1
+dataset: pile
+download_the_pile: true
+the_pile_url: https://huggingface.co/datasets/monology/pile-uncopyrighted/resolve/main/train/
+file_numbers: 0
+preprocess_data: true
+download_vocab_url: https://huggingface.co/gpt2/resolve/main/vocab.json
+download_merges_url: https://huggingface.co/gpt2/resolve/main/merges.txt
+vocab_save_dir: ${CHARLLM_ROOT}/CharLLM-PPT/gpt3-data
+merges_save_dir: ${CHARLLM_ROOT}/CharLLM-PPT/gpt3-data
+tokenizer_type: GPT2BPETokenizer
+tokenizer_library: megatron
+rm_downloaded: true
+rm_extracted: true
