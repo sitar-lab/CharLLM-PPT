@@ -1,18 +1,5 @@
 # CharLLM-PPT
-Artifact repository of MICRO'25 paper titled "Characterizing the Efficiency of Distributed Training: A Power, Performance, and Thermal Perspective".
-
-
-## Quick Links
-- [Quickstart](#quickstart)
-  - [Installation](#install)
-  - [Preparing Scripts and Datasets](#preparing)
-  - [Launching Experiments](#launching)
-  - [Visualizing Results](#visualization)
-- [Main Changes](#main-changes)
-  - [Zeus Changes](#zeus)
-  - [NeMo Changes](#nemo)
-  - [Megatron-NVIDIA Changes](#megatron-lm)
-  - [Megatron-AMD Changes](#megatron-amd)
+Artifact repository of MICRO'25 paper titled "Characterizing the Efficiency of Distributed Training: A Power, Performance, and Thermal Perspective". For more details, please refer to our [paper](https://arxiv.org/abs/2509.10371).
 
 <a name="experiments"></a>
 ## Experiment Guides
